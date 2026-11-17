@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Direito Claro: direitos sociais explicados em linguagem simples.">
+  <meta name="theme-color" content="#1B4F8A">
+  <title>Direito Claro</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================
+       TOKENS DE COR (contrastes verificados: texto >= 4.5:1, maioria >= 7:1)
+       ========================================================== */
+    :root {
+      --font: 'Atkinson Hyperlegible', 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --bg: #F4F2EC;
+      --surface: #FFFFFF;
+      --ink: #1C1C1C;
+      --muted: #4A4A4A;
+      --primary: #1B4F8A;
+      --primary-hover: #163F70;
+      --teal: #0B5E55;
+      --purple: #4B2C7A;
+      --amber: #7A4B00;
+      --line: #767676;
+      --line-soft: #D6D2C6;
+      --info-bg: #E9F1FB;
+      --warn-bg: #FFF1CC;
+      --warn-ink: #5C2E00;
+      --ok-bg: #E3F4EC;
+      --ok-ink: #0B4D2E;
+      --disabled-bg: #E4E1D8;
+      --disabled-ink: #4A4A4A;
+    }
+
+    /* ==========================================================
+       BASE
+       ========================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 1.125rem;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1 { font-size: 1.85rem; line-height: 1.25; margin: 0.5rem 0 1rem; }
+    h2 { font-size: 1.3rem; line-height: 1.3; margin: 0 0 0.25rem; }
+    h3 { font-size: 1.15rem; line-height: 1.3; margin: 0 0 0.25rem; }
+    p { margin: 0 0 1rem; }
+    ul, ol { margin: 0 0 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.5rem; }
+    h1:focus { outline: none; }
+    strong { font-weight: 700; }
+
+    .app {
+      max-width: 36rem;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--surface);
+      position: relative;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    .skip-link {
+      position: absolute; left: -9999px; top: 0.5rem; z-index: 50;
+      background: var(--surface); color: var(--primary);
+      padding: 0.75rem 1rem; border-radius: 0.5rem; font-weight: 700;
+    }
+    .skip-link:focus { left: 1rem; }
+
+    [hidden] { display: none !important; }
+
+    /* ==========================================================
+       ESTRUTURA DE TELAS
+       ========================================================== */
+    .screen {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 0 1.25rem 2rem;
+      animation: enter 0.3s ease-out both;
+    }
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .content { flex: 1; }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+    .actions--row { flex-direction: row; justify-content: space-between; }
+    .actions--row .btn { flex: 1; }
+
+    /* Barra superior das telas de conteúdo: Voltar + Menu principal */
+    .topbar {
+      position: sticky; top: 0; z-index: 5;
+      display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;
+      margin: 0 -1.25rem;
+      padding: 0.5rem 1.25rem;
+      background: var(--surface);
+      border-bottom: 2px solid var(--line-soft);
+    }
+
+    .progress-wrap { margin: 1rem 0 0.25rem; }
+    .progress-wrap p { margin: 0 0 0.4rem; font-weight: 700; color: var(--muted); font-size: 1rem; }
+    progress { width: 100%; height: 0.6rem; accent-color: var(--primary); }
+
+    /* ==========================================================
+       BOTÕES (alvo mínimo de 48 px)
+       ========================================================== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      min-height: 3rem;
+      padding: 0.75rem 1.25rem;
+      border: 2px solid transparent;
+      border-radius: 0.75rem;
+      font-family: inherit; font-size: 1.05rem; font-weight: 700; line-height: 1.2;
+      text-align: center; text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: #FFFFFF; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: var(--surface); color: var(--primary); border-color: var(--primary); }
+    .btn-secondary:hover { background: var(--info-bg); }
+    .btn-ghost { background: transparent; color: var(--primary); padding: 0.5rem 0.75rem; min-height: 2.75rem; font-size: 1rem; }
+    .btn-ghost:hover { background: var(--info-bg); }
+    .btn-light { background: #FFFFFF; color: var(--primary); }
+    .btn-light:hover { background: #E9F1FB; }
+    .btn-block { width: 100%; }
+    .btn[aria-disabled="true"] { background: var(--disabled-bg); color: var(--disabled-ink); border-color: var(--line-soft); cursor: not-allowed; }
+
+    /* ==========================================================
+       COMPONENTES DE CONTEÚDO
+       ========================================================== */
+    .callout { padding: 1rem 1.1rem; border-radius: 0.875rem; margin: 0 0 1.25rem; }
+    .callout--info { background: var(--info-bg); color: var(--ink); border-left: 0.35rem solid var(--primary); }
+    .callout--warn { background: var(--warn-bg); color: var(--warn-ink); border-left: 0.35rem solid var(--warn-ink); }
+    .callout--ok { background: var(--ok-bg); color: var(--ok-ink); border-left: 0.35rem solid var(--ok-ink); }
+    .callout strong { display: block; margin-bottom: 0.25rem; }
+    .callout p:last-child { margin-bottom: 0; }
+
+    .rule {
+      font-size: 1.25rem; font-weight: 700; line-height: 1.45;
+      padding: 1.1rem 1.2rem;
+      border: 3px solid var(--primary);
+      border-radius: 0.875rem;
+      background: var(--surface);
+      margin: 0 0 1.25rem;
+    }
+    .small { font-size: 0.95rem; color: var(--muted); }
+    .mt-1 { margin-top: 1rem; }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      position: relative;
+      padding: 0.6rem 0.75rem 0.6rem 2.4rem;
+      margin-bottom: 0.5rem;
+      background: var(--surface);
+      border: 2px solid var(--line-soft);
+      border-radius: 0.75rem;
+    }
+    .checklist li::before {
+      content: ""; position: absolute; left: 0.8rem; top: 1.05rem;
+      width: 0.9rem; height: 0.9rem;
+      border: 2px solid var(--primary); border-radius: 0.2rem;
+    }
+
+    /* Tabela responsiva (rola horizontalmente no celular) */
+    .table-wrap { overflow-x: auto; margin: 0 0 1.25rem; border: 2px solid var(--line-soft); border-radius: 0.75rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 1rem; background: var(--surface); }
+    caption { text-align: left; font-weight: 700; padding: 0.75rem 1rem; }
+    th, td { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+    thead th { background: var(--info-bg); }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    /* Glossário e perguntas com <details> (nativo, acessível) */
+    .accordion { display: grid; gap: 0.6rem; margin: 0 0 1.25rem; padding: 0; list-style: none; }
+    .accordion li { margin: 0; }
+    .accordion details { background: var(--surface); border: 2px solid var(--line); border-radius: 0.875rem; }
+    .accordion summary {
+      cursor: pointer; list-style: none;
+      min-height: 3rem; padding: 0.85rem 1rem 0.85rem 1rem;
+      font-weight: 700; font-size: 1.1rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;
+    }
+    .accordion summary::-webkit-details-marker { display: none; }
+    .accordion summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: var(--primary); }
+    .accordion details[open] summary::after { content: "−"; }
+    .accordion .answer { padding: 0 1rem 1rem; }
+    .accordion .answer p:last-child { margin-bottom: 0; }
+
+    /* Quiz (verificação de compreensão) */
+    .quiz-options { display: grid; gap: 0.6rem; margin: 0 0 1rem; }
+    .quiz-options .btn { justify-content: flex-start; text-align: left; }
+    .quiz-feedback { min-height: 1px; }
+
+    /* Lista de links de referência */
+    .ref-list { list-style: none; padding: 0; display: grid; gap: 0.6rem; }
+    .ref-list li { margin: 0; }
+
+    /* ==========================================================
+       TELA 01 - SPLASH
+       ========================================================== */
+    .screen-splash {
+      justify-content: center; align-items: center; text-align: center;
+      background: var(--primary); color: #FFFFFF;
+      padding: 2rem 1.5rem;
+    }
+    .screen-splash .app-logo {
+      width: 6.5rem; height: 6.5rem; margin: 0 auto 1.5rem;
+      display: grid; place-items: center;
+      background: #FFFFFF; border-radius: 50%; font-size: 3rem;
+    }
+    .screen-splash h1 { font-size: 2.3rem; color: #FFFFFF; margin-bottom: 0.75rem; }
+    .screen-splash .lead { font-size: 1.25rem; color: #FFFFFF; max-width: 22rem; margin: 0 auto 2.5rem; }
+    .screen-splash .splash-note { color: #E6EEF8; font-size: 0.95rem; margin-top: 2rem; }
+    .screen-splash .btn { min-width: 12rem; }
+
+    /* ==========================================================
+       TELAS 02-03 - ONBOARDING
+       ========================================================== */
+    .onb-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 0.75rem; }
+    .onb-step { font-weight: 700; color: var(--muted); margin: 0; }
+
+    /* ==========================================================
+       TELA 04 - MENU PRINCIPAL
+       ========================================================== */
+    .menu-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.85rem; }
+    .card {
+      display: block;
+      padding: 1rem 1.1rem 1rem 1.2rem;
+      background: var(--surface); color: var(--ink);
+      text-decoration: none;
+      border: 2px solid var(--line);
+      border-left: 0.5rem solid var(--accent, var(--primary));
+      border-radius: 1rem;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    .card:hover { background: #FAFAF7; border-color: var(--ink); }
+    .card h2 { color: var(--ink); }
+    .card p { margin: 0; color: var(--muted); font-size: 1rem; }
+    .card--bpc     { --accent: var(--primary); }
+    .card--saude   { --accent: var(--teal); }
+    .card--escola  { --accent: var(--purple); }
+    .card--aposent { --accent: var(--amber); }
+    .card--glos    { --accent: var(--ink); }
+    .contact-block { margin-top: 2rem; padding-top: 1.25rem; border-top: 2px solid var(--line-soft); }
+
+    /* ==========================================================
+       MODAL DE SAÍDA EXTERNA
+       ========================================================== */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      background: rgba(20, 20, 20, 0.72);
+    }
+    .modal {
+      width: 100%; max-width: 28rem; padding: 1.5rem;
+      background: var(--surface); border-radius: 1rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    .modal h2 { font-size: 1.35rem; margin-bottom: 0.75rem; }
+    .modal .url {
+      word-break: break-all; font-size: 0.95rem;
+      background: var(--bg); padding: 0.5rem 0.75rem; border-radius: 0.5rem;
+    }
+    .modal .actions { flex-direction: column-reverse; }
+
+    /* ==========================================================
+       TOAST
+       ========================================================== */
+    .toast {
+      position: fixed; left: 1rem; right: 1rem; bottom: 1rem; z-index: 30;
+      max-width: 34rem; margin: 0 auto; padding: 1rem 1.2rem;
+      background: var(--ink); color: #FFFFFF;
+      border-radius: 0.75rem; font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ==========================================================
+       RESPONSIVO (desktop) E MOVIMENTO REDUZIDO
+       ========================================================== */
+    @media (min-width: 600px) {
+      body { padding: 2rem 0; }
+      .app { border-radius: 1.25rem; overflow: hidden; min-height: auto; }
+      .screen { min-height: 640px; }
+    }
+    @media (max-width: 360px) {
+      body { font-size: 1.05rem; }
+      h1 { font-size: 1.6rem; }
+      .actions--row { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+      .table-wrap { overflow: visible; border: 0; }
+      table, tbody, tr, th, td { display: block; width: 100%; }
+      thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+      caption { display: block; width: 100%; padding: 0 0 0.5rem; }
+      tbody tr { background: var(--surface); border: 2px solid var(--line-soft); border-radius: 0.75rem; margin-bottom: 0.75rem; padding: 0.5rem 0; }
+      td, tbody th { border: 0; padding: 0.35rem 1rem; }
+      tbody th { font-size: 1.1rem; }
+      td::before { content: attr(data-label); display: block; font-weight: 700; color: var(--muted); font-size: 0.9rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#app">Pular para o conteúdo</a>
+  <div id="announcer" class="sr-only" aria-live="polite"></div>
+
+  <main id="app" class="app" tabindex="-1">
+
+    <!-- =====================================================
+         01 · SPLASH
+         ===================================================== -->
+    <section id="t01" class="screen screen-splash" aria-labelledby="t01-title" data-title="Início">
+      <div class="content">
+        <div class="app-logo" aria-hidden="true">⚖️</div>
+        <h1 id="t01-title" tabindex="-1">Direito Claro</h1>
+        <p class="lead">Seus direitos explicados em linguagem simples.</p>
+        <div class="actions">
+          <button type="button" class="btn btn-light btn-block" data-go="t02">Começar</button>
+        </div>
+        <p class="splash-note">Conteúdo informativo. Não substitui a orientação de advogado ou defensor público.</p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         02 · ONBOARDING (1 de 2)
+         ===================================================== -->
+    <section id="t02" class="screen" aria-labelledby="t02-title" data-title="Apresentação" hidden>
+      <div class="onb-head">
+        <p class="onb-step">Passo 1 de 2</p>
+        <button type="button" class="btn btn-ghost" data-go="t04">Pular</button>
+      </div>
+      <div class="content">
+        <h1 id="t02-title" tabindex="-1">Entender a lei é um direito</h1>
+        <p>Muitas leis e decisões usam palavras difíceis. Aqui, cada assunto é explicado em etapas curtas e com palavras do dia a dia.</p>
+        <p>Você não precisa saber Direito para usar o Direito Claro.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t03">Avançar</button>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         03 · ONBOARDING (2 de 2)
+         ===================================================== -->
+    <section id="t03" class="screen" aria-labelledby="t03-title" data-title="Como usar" hidden>
+      <div class="onb-head">
+        <p class="onb-step">Passo 2 de 2</p>
+        <button type="button" class="btn btn-ghost" data-go="t04">Pular</button>
+      </div>
+      <div class="content">
+        <h1 id="t03-title" tabindex="-1">Como usar o Direito Claro</h1>
+        <ol>
+          <li>Escolha um assunto no menu principal.</li>
+          <li>Leia uma etapa por vez.</li>
+          <li>Use <strong>Voltar</strong> para a tela anterior ou <strong>Menu principal</strong> para recomeçar.</li>
+        </ol>
+        <div class="callout callout--warn" role="note">
+          <strong>Aviso importante</strong>
+          <p>Estas informações são gerais e não substituem a orientação de advogado ou defensor público.</p>
+          <p>Os textos ainda não foram homologados. O projeto mantém interlocução com a Comissão de Direito da Pessoa com Autismo da OAB/DF — Subseção Águas Claras.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t04">Ir para o menu principal</button>
+        <button type="button" class="btn btn-secondary btn-block" data-go="t02">Voltar</button>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         04 · MENU PRINCIPAL (Hub de navegação)
+         ===================================================== -->
+    <section id="t04" class="screen" aria-labelledby="t04-title" data-title="Menu principal" hidden>
+      <div class="content">
+        <h1 id="t04-title" tabindex="-1">Menu principal</h1>
+        <p>Escolha o assunto que você quer entender.</p>
+
+        <ul class="menu-list" aria-label="Assuntos disponíveis">
+          <li>
+            <a class="card card--bpc" href="#t05">
+              <h2>BPC (LOAS)</h2>
+              <p>Benefício do INSS para pessoa com deficiência ou pessoa idosa de baixa renda.</p>
+            </a>
+          </li>
+          <li>
+            <a class="card card--saude" href="#t12">
+              <h2>Planos de saúde e terapias para TEA</h2>
+              <p>O que fazer quando o plano limita as sessões de terapia.</p>
+            </a>
+          </li>
+          <li>
+            <a class="card card--escola" href="#t18">
+              <h2>Educação inclusiva na escola</h2>
+              <p>Cobranças extras, apoio escolar e acompanhante.</p>
+            </a>
+          </li>
+          <li>
+            <a class="card card--aposent" href="#t23">
+              <h2>Aposentadoria da pessoa com deficiência</h2>
+              <p>Regras da Lei Complementar 142/2013.</p>
+            </a>
+          </li>
+          <li>
+            <a class="card card--glos" href="#t26">
+              <h2>Glossário e documentos</h2>
+              <p>Termos explicados e orientações sobre laudos.</p>
+            </a>
+          </li>
+        </ul>
+
+        <div class="contact-block">
+          <button type="button" class="btn btn-secondary btn-block" disabled aria-disabled="true">Enviar mensagem à Comissão</button>
+          <p class="small mt-1">Funcionalidade temporariamente inativa. Canal oficial em definição.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FLUXO 1 · BPC (LOAS) · Telas 05 a 11
+         ===================================================== -->
+
+    <!-- 05 -->
+    <section id="t05" class="screen" aria-labelledby="t05-title" data-title="BPC: o que é" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t04"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>BPC · Etapa 1 de 7</p>
+        <progress max="7" value="1" aria-label="Progresso do fluxo BPC: etapa 1 de 7"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t05-title" tabindex="-1">BPC: o que é</h1>
+        <p>O Benefício de Prestação Continuada (BPC), também chamado de BPC/LOAS, é pago pelo INSS a pessoas com deficiência e a pessoas idosas que não têm meios de prover o próprio sustento nem de tê-lo provido pela família.</p>
+        <p>O BPC não é aposentadoria: não exige contribuição ao INSS e tem regras próprias.</p>
+        <div class="callout callout--info">
+          <strong>Para ter direito, há dois requisitos:</strong>
+          <p>Eles precisam ser atendidos juntos: a renda familiar e a avaliação médica e social.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t06">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section id="t06" class="screen" aria-labelledby="t06-title" data-title="BPC: requisito de renda" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t05"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>BPC · Etapa 2 de 7</p>
+        <progress max="7" value="2" aria-label="Progresso do fluxo BPC: etapa 2 de 7"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t06-title" tabindex="-1">Requisito 1: renda familiar</h1>
+        <p class="rule">Renda familiar per capita igual ou inferior a 1/4 do salário mínimo.</p>
+        <p>A lei e decisões judiciais preveem situações em que o critério de renda pode ser diferente. Confirme o seu caso com o INSS ou com a Defensoria Pública.</p>
+        <p><strong>Per capita</strong> quer dizer <strong>por pessoa</strong>. Na prática, some a renda da família e divida pelo número de pessoas que fazem parte dela.</p>
+        <p class="small">O cálculo oficial segue regras específicas da lei. Confirme os detalhes com o INSS ou com a Defensoria Pública.</p>
+        <p class="small">Base: Lei Orgânica da Assistência Social (LOAS), Lei nº 8.742/1993, art. 20, § 3º. A redação atual deve ser conferida na versão vigente da lei.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t07">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section id="t07" class="screen" aria-labelledby="t07-title" data-title="BPC: avaliação médica e social" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t06"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>BPC · Etapa 3 de 7</p>
+        <progress max="7" value="3" aria-label="Progresso do fluxo BPC: etapa 3 de 7"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t07-title" tabindex="-1">Requisito 2: avaliação médica e social</h1>
+        <p class="rule">É obrigatória a aprovação na avaliação médica e social para constatar o impedimento de longo prazo e a condição de vulnerabilidade.</p>
+        <p>Ter um laudo ou um diagnóstico não garante o benefício sozinho.</p>
+        <p>Em outras palavras, o INSS verifica dois pontos: se a deficiência ou a condição de saúde causa impedimento de longo prazo e se a família está em situação de vulnerabilidade.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t08">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section id="t08" class="screen" aria-labelledby="t08-title" data-title="BPC: atenção" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t07"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>BPC · Etapa 4 de 7</p>
+        <progress max="7" value="4" aria-label="Progresso do fluxo BPC: etapa 4 de 7"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t08-title" tabindex="-1">Atenção: renda baixa não garante o BPC</h1>
+        <div class="callout callout--warn" role="note">
+          <strong>Importante</strong>
+          <p>O preenchimento do requisito de renda não garante a concessão automática.</p>
+        </div>
+        <p>Você precisa atender ao requisito de renda <strong>e</strong> ser aprovado na avaliação médica e social. Os dois fazem parte da análise.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t09">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 09 -->
+    <section id="t09" class="screen" aria-labelledby="t09-title" data-title="BPC: como pedir" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t08"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>BPC · Etapa 5 de 7</p>
+        <progress max="7" value="5" aria-label="Progresso do fluxo BPC: etapa 5 de 7"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t09-title" tabindex="-1">Como pedir o BPC</h1>
+        <p>O pedido é feito ao INSS. Você pode usar o aplicativo ou o site Meu INSS, ou ligar para a central 135.</p>
+        <p class="small">Confirme os canais de atendimento atuais no site oficial do INSS.</p>
+        <p>Antes de começar, separe o que costuma ser pedido:</p>
+        <ul class="checklist">
+          <li>Documento de identidade e CPF de quem faz o pedido</li>
+          <li>Documentos de todas as pessoas que moram na casa</li>
+          <li>Laudos e relatórios médicos sobre a deficiência</li>
+          <li>Comprovantes de renda da família</li>
+        </ul>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t10">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section id="t10" class="screen" aria-labelledby="t10-title" data-title="BPC: depois do pedido" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t09"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>BPC · Etapa 6 de 7</p>
+        <progress max="7" value="6" aria-label="Progresso do fluxo BPC: etapa 6 de 7"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t10-title" tabindex="-1">Depois do pedido</h1>
+        <p>Depois do pedido, o INSS faz a análise e informa a decisão.</p>
+        <p>Se o pedido for negado, leia com atenção o motivo informado. Você pode pedir recurso administrativo dentro do prazo indicado na decisão.</p>
+        <div class="callout callout--info">
+          <strong>Dúvida sobre a decisão?</strong>
+          <p>Procure orientação de advogado ou Defensoria Pública antes de decidir o que fazer.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t11">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section id="t11" class="screen" aria-labelledby="t11-title" data-title="BPC: base legal" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t10"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>BPC · Etapa 7 de 7</p>
+        <progress max="7" value="7" aria-label="Progresso do fluxo BPC: etapa 7 de 7"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t11-title" tabindex="-1">Base legal do BPC</h1>
+        <p>Este assunto está fundamentado em:</p>
+        <p><strong>Lei Orgânica da Assistência Social (LOAS), Lei nº 8.742/1993, art. 20, § 3º.</strong></p>
+        <p><button type="button" class="btn btn-secondary btn-block" data-external="https://www.planalto.gov.br/ccivil_03/leis/l8742.htm">Ver a lei no Planalto</button></p>
+        <p class="small">Fontes consultadas em 05/11/2026. Conteúdo informativo, ainda não homologado pela Comissão de Direito da Pessoa com Autismo da OAB/DF — Subseção Águas Claras.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t12">Avançar para Planos de saúde</button>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FLUXO 2 · PLANOS DE SAÚDE E TERAPIAS PARA TEA · Telas 12 a 17
+         ===================================================== -->
+
+    <!-- 12 -->
+    <section id="t12" class="screen" aria-labelledby="t12-title" data-title="Planos de saúde: introdução" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t04"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Planos de saúde · Etapa 1 de 6</p>
+        <progress max="6" value="1" aria-label="Progresso do fluxo Planos de saúde: etapa 1 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t12-title" tabindex="-1">Plano de saúde e terapias para TEA</h1>
+        <p>Algumas famílias recebem uma negativa do plano de saúde quando as terapias de uma criança ou adulto com Transtorno do Espectro Autista (TEA) passam do limite de sessões do contrato.</p>
+        <p>Veja, nas próximas etapas, o que o Superior Tribunal de Justiça (STJ) decidiu e o que isso significa na prática.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t13">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section id="t13" class="screen" aria-labelledby="t13-title" data-title="Planos de saúde: decisão do STJ" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t12"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Planos de saúde · Etapa 2 de 6</p>
+        <progress max="6" value="2" aria-label="Progresso do fluxo Planos de saúde: etapa 2 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t13-title" tabindex="-1">O que o STJ decidiu</h1>
+        <p class="rule">É abusiva a limitação do número de sessões de terapia multidisciplinar (psicologia, fonoaudiologia, fisioterapia e terapia ocupacional) prescritas ao paciente com Transtorno do Espectro Autista (TEA).</p>
+        <p>Essa decisão é o <strong>Tema Repetitivo 1.295 do STJ</strong>. Ela orienta os demais processos parecidos.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t14">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 14 -->
+    <section id="t14" class="screen" aria-labelledby="t14-title" data-title="Planos de saúde: limites" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t13"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Planos de saúde · Etapa 3 de 6</p>
+        <progress max="6" value="3" aria-label="Progresso do fluxo Planos de saúde: etapa 3 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t14-title" tabindex="-1">O que essa decisão não significa</h1>
+        <div class="callout callout--warn" role="note">
+          <strong>Atenção</strong>
+          <p>A decisão trata da limitação de sessões de terapias multidisciplinares prescritas a pessoas com TEA. Ela não trata de outros procedimentos ou medicamentos. Para esses casos, as regras do contrato e da Lei nº 14.454/2022 podem se aplicar, e a análise depende de cada situação.</p>
+        </div>
+        <p>Ou seja, ela vale para as terapias multidisciplinares prescritas a pessoas com TEA. Não é um "passe livre" para qualquer tratamento.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t15">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 15 -->
+    <section id="t15" class="screen" aria-labelledby="t15-title" data-title="Planos de saúde: o que pedir" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t14"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Planos de saúde · Etapa 4 de 6</p>
+        <progress max="6" value="4" aria-label="Progresso do fluxo Planos de saúde: etapa 4 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t15-title" tabindex="-1">Peça a prescrição com justificativa</h1>
+        <p>Antes de pedir uma nova autorização, peça ao médico uma prescrição que informe:</p>
+        <ul class="checklist">
+          <li>Quais terapias são necessárias, como fonoaudiologia, psicologia ou terapia ocupacional</li>
+          <li>Quantas sessões são indicadas por semana ou por mês</li>
+          <li>A justificativa clínica para esse número de sessões</li>
+        </ul>
+        <p class="small">Guarde cópias de tudo o que for entregue ao plano.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t16">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 16 -->
+    <section id="t16" class="screen" aria-labelledby="t16-title" data-title="Planos de saúde: se negarem" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t15"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Planos de saúde · Etapa 5 de 6</p>
+        <progress max="6" value="5" aria-label="Progresso do fluxo Planos de saúde: etapa 5 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t16-title" tabindex="-1">Se o plano negar</h1>
+        <p>Peça a negativa <strong>por escrito</strong>, com o motivo informado. Ela é importante para qualquer reclamação posterior.</p>
+        <p>Você pode registrar uma reclamação na <strong>ANS (Agência Nacional de Saúde Suplementar)</strong>, órgão que regula os planos de saúde.</p>
+        <div class="callout callout--info">
+          <strong>Quando buscar ajuda</strong>
+          <p>Se a negativa continuar, procure a Defensoria Pública ou um advogado. Eles avaliam o caso antes de qualquer ação judicial.</p>
+          <p>Para tratamentos que não estão no rol da ANS, a Lei nº 14.454/2022 prevê critérios de cobertura. Confirme o seu caso com a Defensoria Pública ou com um advogado.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t17">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 17 -->
+    <section id="t17" class="screen" aria-labelledby="t17-title" data-title="Planos de saúde: base legal" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t16"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Planos de saúde · Etapa 6 de 6</p>
+        <progress max="6" value="6" aria-label="Progresso do fluxo Planos de saúde: etapa 6 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t17-title" tabindex="-1">Base legal: Tema 1.295 do STJ</h1>
+        <p>Este assunto está fundamentado em:</p>
+        <p><strong>Superior Tribunal de Justiça (STJ), Tema Repetitivo 1.295.</strong> Delimita a abusividade da limitação de sessões às terapias multidisciplinares prescritas a pacientes com TEA.</p>
+        <p>Outra norma relacionada: Lei nº 14.454/2022, que altera a Lei nº 9.656/1998 sobre a cobertura de tratamentos que não estão no rol da ANS. Conteúdo a revisar pela equipe jurídica.</p>
+        <p><button type="button" class="btn btn-secondary btn-block" data-external="https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp">Ver temas repetitivos do STJ</button></p>
+        <p class="small">Fontes consultadas em 05/11/2026. Conteúdo informativo, ainda não homologado pela Comissão de Direito da Pessoa com Autismo da OAB/DF — Subseção Águas Claras.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t18">Avançar para Educação inclusiva</button>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FLUXO 3 · EDUCAÇÃO INCLUSIVA (ESCOLA) · Telas 18 a 22
+         ===================================================== -->
+
+    <!-- 18 -->
+    <section id="t18" class="screen" aria-labelledby="t18-title" data-title="Escola: cobranças" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t04"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Escola · Etapa 1 de 5</p>
+        <progress max="5" value="1" aria-label="Progresso do fluxo Escola: etapa 1 de 5"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t18-title" tabindex="-1">Escola não pode cobrar a mais por inclusão</h1>
+        <p class="rule">Escolas privadas não podem cobrar taxas extras, anuidades diferenciadas ou mensalidades adicionais.</p>
+        <p>Essa regra vale para escolas privadas e se aplica a estudantes com deficiência, incluindo o estudante autista.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t19">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 19 -->
+    <section id="t19" class="screen" aria-labelledby="t19-title" data-title="Escola: por que a regra existe" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t18"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Escola · Etapa 2 de 5</p>
+        <progress max="5" value="2" aria-label="Progresso do fluxo Escola: etapa 2 de 5"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t19-title" tabindex="-1">De onde vem essa proibição</h1>
+        <p>A <strong>Lei Brasileira de Inclusão (LBI)</strong>, Lei nº 13.146/2015, prevê essas obrigações. O Supremo Tribunal Federal (STF), na <strong>ADI 5.357</strong>, julgada em 9 de junho de 2016, considerou constitucionais o art. 28, § 1º, e o art. 30 da LBI.</p>
+        <p>Por isso, a vedação de qualquer cobrança de valores adicionais em mensalidades ou anuidades tem fundamento na LBI e na decisão do STF.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t20">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 20 -->
+    <section id="t20" class="screen" aria-labelledby="t20-title" data-title="Escola: quem é quem" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t19"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Escola · Etapa 3 de 5</p>
+        <progress max="5" value="3" aria-label="Progresso do fluxo Escola: etapa 3 de 5"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t20-title" tabindex="-1">Apoio escolar ou acompanhante?</h1>
+        <p>Esses nomes parecem iguais, mas são profissionais diferentes. Cada um tem uma base legal e uma função.</p>
+
+        <div class="table-wrap">
+          <table>
+            <caption>Diferença entre os profissionais de apoio</caption>
+            <thead>
+              <tr>
+                <th scope="col">Profissional</th>
+                <th scope="col">Base legal</th>
+                <th scope="col">Função</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Profissional de apoio escolar</th>
+                <td data-label="Base legal">Art. 3º, XIII, da Lei 13.146/2015 (LBI)</td>
+                <td data-label="Função">Atua na higiene, alimentação e locomoção.</td>
+              </tr>
+              <tr>
+                <th scope="row">Acompanhante especializado</th>
+                <td data-label="Base legal">Art. 3º, §1º, da Lei 12.764/2012</td>
+                <td data-label="Função">Atende a demandas educacionais e de aprendizagem específicas do aluno autista.</td>
+              </tr>
+              <tr>
+                <th scope="row">Acompanhante terapêutico (AT)</th>
+                <td data-label="Base legal">Não tem previsão direta nas leis educacionais.</td>
+                <td data-label="Função">Profissional de saúde clínica, fora do escopo escolar. Geralmente é custeado pelo plano de saúde ou pela família.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t21">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 21 -->
+    <section id="t21" class="screen" aria-labelledby="t21-title" data-title="Escola: teste rápido" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t20"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Escola · Etapa 4 de 5</p>
+        <progress max="5" value="4" aria-label="Progresso do fluxo Escola: etapa 4 de 5"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t21-title" tabindex="-1">Teste rápido</h1>
+        <p><strong>Uma criança precisa de ajuda para ir ao banheiro e para se alimentar na escola. Qual profissional atende essa necessidade?</strong></p>
+
+        <div class="quiz-options" role="group" aria-label="Opções de resposta">
+          <button type="button" class="btn btn-secondary btn-block" data-quiz="a" data-correct="false">Acompanhante terapêutico</button>
+          <button type="button" class="btn btn-secondary btn-block" data-quiz="b" data-correct="true">Profissional de apoio escolar</button>
+          <button type="button" class="btn btn-secondary btn-block" data-quiz="c" data-correct="false">Acompanhante especializado</button>
+        </div>
+
+        <div id="quiz-feedback" class="quiz-feedback" aria-live="polite"></div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t22">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 22 -->
+    <section id="t22" class="screen" aria-labelledby="t22-title" data-title="Escola: base legal" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t21"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Escola · Etapa 5 de 5</p>
+        <progress max="5" value="5" aria-label="Progresso do fluxo Escola: etapa 5 de 5"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t22-title" tabindex="-1">Base legal da educação inclusiva</h1>
+        <ul class="ref-list">
+          <li><button type="button" class="btn btn-secondary btn-block" data-external="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm">Lei nº 13.146/2015 (LBI)</button></li>
+          <li><button type="button" class="btn btn-secondary btn-block" data-external="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12764.htm">Lei nº 12.764/2012 (Autismo)</button></li>
+          <li><button type="button" class="btn btn-secondary btn-block" data-external="https://portal.stf.jus.br/">STF, ADI 5.357</button></li>
+        </ul>
+        <p class="small">Fontes consultadas em 05/11/2026. Conteúdo informativo, ainda não homologado pela Comissão de Direito da Pessoa com Autismo da OAB/DF — Subseção Águas Claras.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t23">Avançar para Aposentadoria PCD</button>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FLUXO 4 · APOSENTADORIA DA PESSOA COM DEFICIÊNCIA · Telas 23 a 25
+         ===================================================== -->
+
+    <!-- 23 -->
+    <section id="t23" class="screen" aria-labelledby="t23-title" data-title="Aposentadoria PCD: introdução" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t04"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Aposentadoria PCD · Etapa 1 de 3</p>
+        <progress max="3" value="1" aria-label="Progresso do fluxo Aposentadoria PCD: etapa 1 de 3"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t23-title" tabindex="-1">Aposentadoria da pessoa com deficiência</h1>
+        <p>A Lei Complementar nº 142/2013 prevê duas formas de aposentadoria para quem tem deficiência:</p>
+        <ul>
+          <li><strong>Por idade</strong></li>
+          <li><strong>Por tempo de contribuição</strong>, conforme o grau da deficiência: leve, moderada ou grave</li>
+        </ul>
+        <div class="callout callout--info">
+          <strong>Pontos de atenção</strong>
+          <p>A deficiência precisa ser comprovada durante o período de contribuição. E o grau depende de avaliação previdenciária.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t24">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 24 -->
+    <section id="t24" class="screen" aria-labelledby="t24-title" data-title="Aposentadoria PCD: requisitos" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t23"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Aposentadoria PCD · Etapa 2 de 3</p>
+        <progress max="3" value="2" aria-label="Progresso do fluxo Aposentadoria PCD: etapa 2 de 3"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t24-title" tabindex="-1">Requisitos e tempo de contribuição</h1>
+        <p class="rule">Aposentadoria por idade: 60 anos (homem) ou 55 anos (mulher), com 15 anos de contribuição.</p>
+        <p>Nessa modalidade, é obrigatória a comprovação da existência da deficiência <strong>durante os 15 anos de contribuição</strong>.</p>
+
+        <p>Na aposentadoria por tempo de contribuição, o tempo exigido depende do grau da deficiência:</p>
+        <div class="table-wrap">
+          <table>
+            <caption>Tempo de contribuição por grau de deficiência</caption>
+            <thead>
+              <tr>
+                <th scope="col">Grau</th>
+                <th scope="col">Homem</th>
+                <th scope="col">Mulher</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Grave</th><td data-label="Homem">25 anos</td><td data-label="Mulher">20 anos</td></tr>
+              <tr><th scope="row">Moderada</th><td data-label="Homem">29 anos</td><td data-label="Mulher">24 anos</td></tr>
+              <tr><th scope="row">Leve</th><td data-label="Homem">33 anos</td><td data-label="Mulher">28 anos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t25">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 25 -->
+    <section id="t25" class="screen" aria-labelledby="t25-title" data-title="Aposentadoria PCD: perícia e base legal" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t24"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Aposentadoria PCD · Etapa 3 de 3</p>
+        <progress max="3" value="3" aria-label="Progresso do fluxo Aposentadoria PCD: etapa 3 de 3"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t25-title" tabindex="-1">Perícia e base legal</h1>
+        <p class="rule">O reconhecimento do grau de deficiência depende estritamente de avaliação médica e funcional conforme as regras previdenciárias.</p>
+        <p>Ou seja, o grau não é definido só pelo laudo. A perícia do INSS faz essa avaliação.</p>
+        <p>Base: <strong>Lei Complementar nº 142/2013</strong>.</p>
+        <p><button type="button" class="btn btn-secondary btn-block" data-external="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp142.htm">Ver a lei no Planalto</button></p>
+        <p class="small">Fontes consultadas em 05/11/2026. Conteúdo informativo, ainda não homologado pela Comissão de Direito da Pessoa com Autismo da OAB/DF — Subseção Águas Claras.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t26">Avançar para o Glossário</button>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FLUXO 5 · GLOSSÁRIO E ENCERRAMENTO · Telas 26 a 31
+         ===================================================== -->
+
+    <!-- 26 -->
+    <section id="t26" class="screen" aria-labelledby="t26-title" data-title="Glossário: termos do BPC" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t04"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Glossário e Documentos · Etapa 1 de 6</p>
+        <progress max="6" value="1" aria-label="Progresso do glossário: etapa 1 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t26-title" tabindex="-1">Termos do BPC</h1>
+        <p class="small">Toque em um termo para ver a explicação.</p>
+        <ul class="accordion">
+          <li>
+            <details>
+              <summary>BPC/LOAS</summary>
+              <div class="answer"><p>Benefício de Prestação Continuada, pago pelo INSS. Está previsto na Lei Orgânica da Assistência Social (LOAS).</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Renda per capita</summary>
+              <div class="answer"><p>Renda dividida pelo número de pessoas da família. Para o BPC, o resultado precisa ser igual ou inferior a 1/4 do salário mínimo.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Avaliação médica e social</summary>
+              <div class="answer"><p>Análise feita pelo INSS para verificar o impedimento de longo prazo e a situação de vulnerabilidade da família.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Impedimento de longo prazo</summary>
+              <div class="answer"><p>Limitação de longa duração, que pode afetar a participação plena e efetiva na sociedade. O INSS avalia esse ponto na perícia.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Vulnerabilidade</summary>
+              <div class="answer"><p>Situação em que a família não consegue prover o sustento de quem tem deficiência ou de pessoa idosa. Também é avaliada pelo INSS.</p></div>
+            </details>
+          </li>
+        </ul>
+      </div>
+      <div class="actions actions--row">
+        <button type="button" class="btn btn-secondary" data-go="t27">Próxima parte</button>
+      </div>
+    </section>
+
+    <!-- 27 -->
+    <section id="t27" class="screen" aria-labelledby="t27-title" data-title="Glossário: saúde e escola" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t26"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Glossário e Documentos · Etapa 2 de 6</p>
+        <progress max="6" value="2" aria-label="Progresso do glossário: etapa 2 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t27-title" tabindex="-1">Termos de saúde e escola</h1>
+        <p class="small">Toque em um termo para ver a explicação.</p>
+        <ul class="accordion">
+          <li>
+            <details>
+              <summary>TEA</summary>
+              <div class="answer"><p>Transtorno do Espectro Autista.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Terapia multidisciplinar</summary>
+              <div class="answer"><p>Terapia feita por profissionais de áreas diferentes, como fonoaudiologia, psicologia e terapia ocupacional.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Prescrição médica</summary>
+              <div class="answer"><p>Documento do médico que indica a terapia. Ajuda o pedido explicar o motivo clínico, mas essa explicação é uma orientação prática, não uma condição prevista na tese do STJ.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Apoio escolar</summary>
+              <div class="answer"><p>Profissional que ajuda na higiene, alimentação e locomoção do estudante (LBI, art. 3º, XIII).</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Acompanhante especializado</summary>
+              <div class="answer"><p>Profissional que atende a demandas de aprendizagem e inclusão educacional do aluno autista (Lei 12.764/2012, art. 3º, §1º).</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Acompanhante terapêutico (AT)</summary>
+              <div class="answer"><p>Profissional de saúde clínica, fora do escopo escolar.</p></div>
+            </details>
+          </li>
+        </ul>
+      </div>
+      <div class="actions actions--row">
+        <button type="button" class="btn btn-secondary" data-go="t28">Próxima parte</button>
+      </div>
+    </section>
+
+    <!-- 28 -->
+    <section id="t28" class="screen" aria-labelledby="t28-title" data-title="Glossário: previdência e justiça" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t27"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Glossário e Documentos · Etapa 3 de 6</p>
+        <progress max="6" value="3" aria-label="Progresso do glossário: etapa 3 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t28-title" tabindex="-1">Termos de previdência e justiça</h1>
+        <p class="small">Toque em um termo para ver a explicação.</p>
+        <ul class="accordion">
+          <li>
+            <details>
+              <summary>Contribuição</summary>
+              <div class="answer"><p>Pagamento feito ao INSS durante o trabalho, que dá direito à aposentadoria.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Grau de deficiência</summary>
+              <div class="answer"><p>Classificação em leve, moderada ou grave. Define o tempo de contribuição na aposentadoria PCD e depende de avaliação previdenciária.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Perícia</summary>
+              <div class="answer"><p>Avaliação médica e funcional feita pelo INSS.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Recurso administrativo</summary>
+              <div class="answer"><p>Pedido para rever uma decisão dentro do próprio órgão, dentro do prazo informado na decisão.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Tema repetitivo (STJ)</summary>
+              <div class="answer"><p>Decisão do STJ que orienta outros processos com o mesmo assunto.</p></div>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>ADI (STF)</summary>
+              <div class="answer"><p>Ação que questiona se uma lei é compatível com a Constituição. A ADI 5.357 confirmou obrigações da LBI.</p></div>
+            </details>
+          </li>
+        </ul>
+      </div>
+      <div class="actions actions--row">
+        <button type="button" class="btn btn-secondary" data-go="t29">Próxima tela</button>
+      </div>
+    </section>
+
+    <!-- 29 -->
+    <section id="t29" class="screen" aria-labelledby="t29-title" data-title="Laudos: orientações" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t28"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Glossário e Documentos · Etapa 4 de 6</p>
+        <progress max="6" value="4" aria-label="Progresso do glossário e documentos: etapa 4 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t29-title" tabindex="-1">Como pedir um laudo</h1>
+        <p>Um bom laudo ajuda, mas não garante o resultado sozinho. A decisão final depende da análise do órgão responsável.</p>
+        <p>Ao pedir o laudo ao médico, confira se ele tem:</p>
+        <ul class="checklist">
+          <li>Diagnóstico, com data e nome completo do paciente</li>
+          <li>Descrição das limitações do dia a dia, como comunicação, alimentação, locomoção e aprendizagem</li>
+          <li>Indicação das terapias ou apoios necessários, com justificativa</li>
+          <li>Nome, registro profissional e assinatura do médico</li>
+        </ul>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t30">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 30 -->
+    <section id="t30" class="screen" aria-labelledby="t30-title" data-title="Onde buscar ajuda" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t29"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Glossário e Documentos · Etapa 5 de 6</p>
+        <progress max="6" value="5" aria-label="Progresso do glossário e documentos: etapa 5 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t30-title" tabindex="-1">Onde buscar ajuda</h1>
+        <ul>
+          <li><strong>INSS:</strong> BPC e aposentadoria.</li>
+          <li><strong>ANS:</strong> reclamações sobre planos de saúde.</li>
+          <li><strong>MEC e secretaria de educação:</strong> questões sobre escolas e educação inclusiva.</li>
+          <li><strong>Defensoria Pública:</strong> orientação gratuita para quem não pode pagar um advogado.</li>
+          <li><strong>Advogado:</strong> casos complexos e ações judiciais.</li>
+        </ul>
+        <p class="small">Procure os canais oficiais de cada órgão para confirmar os meios de atendimento.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t31">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 31 -->
+    <section id="t31" class="screen" aria-labelledby="t31-title" data-title="Encerramento" hidden>
+      <nav class="topbar" aria-label="Navegação da tela">
+        <button type="button" class="btn btn-ghost" data-go="t30"><span aria-hidden="true">←</span> Voltar</button>
+        <button type="button" class="btn btn-ghost" data-go="t04">Menu principal</button>
+      </nav>
+      <div class="progress-wrap">
+        <p>Glossário e Documentos · Etapa 6 de 6</p>
+        <progress max="6" value="6" aria-label="Progresso do glossário e documentos: etapa 6 de 6"></progress>
+      </div>
+      <div class="content">
+        <h1 id="t31-title" tabindex="-1">Obrigado por usar o Direito Claro</h1>
+        <p>Você pode revisar qualquer assunto pelo menu principal, quando quiser.</p>
+        <div class="callout callout--warn" role="note">
+          <strong>Aviso importante</strong>
+          <p>Este conteúdo é informativo e não substitui a orientação de advogado ou defensor público.</p>
+          <p>Os textos ainda não foram homologados.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary btn-block" data-go="t04">Menu principal</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================
+       MODAL DE SAÍDA EXTERNA
+       ===================================================== -->
+  <div id="modal" class="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+      <h2 id="modal-title">Você será redirecionado para um site externo</h2>
+      <p id="modal-desc">Você vai abrir o endereço abaixo em outra aba. O Direito Claro não controla o conteúdo desse site.</p>
+      <p class="url" id="modal-url"></p>
+      <div class="actions">
+        <a id="modal-go" class="btn btn-primary btn-block" href="#" target="_blank" rel="noopener noreferrer">Continuar</a>
+        <button id="modal-cancel" type="button" class="btn btn-secondary btn-block">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const app = document.getElementById('app');
+      const announcer = document.getElementById('announcer');
+      const toastEl = document.getElementById('toast');
+      const modal = document.getElementById('modal');
+      const modalGo = document.getElementById('modal-go');
+      const modalCancel = document.getElementById('modal-cancel');
+      const modalUrl = document.getElementById('modal-url');
+
+      const HOME = 't04';
+      const START = 't01';
+      let toastTimer = null;
+      let returnFocusEl = null;
+
+      /* ---------- Utilidades ---------- */
+
+      function screenExists(id) {
+        const el = document.getElementById(id);
+        return Boolean(el) && el.classList.contains('screen');
+      }
+
+      function announce(message) {
+        announcer.textContent = '';
+        window.setTimeout(function () { announcer.textContent = message; }, 50);
+      }
+
+      function toast(message) {
+        toastEl.textContent = message;
+        toastEl.hidden = false;
+        announce(message);
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(function () { toastEl.hidden = true; }, 4500);
+      }
+
+      /* ---------- Roteamento por hash (SPA) ---------- */
+
+      function showScreen(id, moveFocus) {
+        const target = document.getElementById(id);
+        document.querySelectorAll('.screen').forEach(function (screen) {
+          screen.hidden = screen !== target;
+        });
+
+        document.title = target.dataset.title + ' · Direito Claro';
+        window.scrollTo(0, 0);
+
+        if (moveFocus !== false) {
+          const heading = target.querySelector('h1');
+          if (heading) heading.focus({ preventScroll: true });
+        }
+      }
+
+      function go(id) {
+        if (!screenExists(id)) {
+          toast('Esta etapa ainda está em construção.');
+          return;
+        }
+        // Troca a tela de imediato (não depende do evento assíncrono hashchange)
+        showScreen(id, true);
+        if (location.hash !== '#' + id) {
+          location.hash = id; // mantém histórico do navegador e deep links
+        }
+      }
+
+      function route(initial) {
+        let id = location.hash.slice(1);
+        if (!id) id = START;
+
+        if (!screenExists(id)) {
+          id = HOME;
+          history.replaceState(null, '', '#' + HOME);
+        }
+        showScreen(id, !initial);
+      }
+
+      window.addEventListener('hashchange', function () { route(false); });
+
+      /* ---------- Cliques de navegação ---------- */
+
+      document.addEventListener('click', function (event) {
+        const external = event.target.closest('[data-external]');
+        if (external) {
+          event.preventDefault();
+          openExternal(external.dataset.external);
+          return;
+        }
+
+        const nav = event.target.closest('[data-go], a[href^="#t"]');
+        if (!nav) return;
+        if (nav.getAttribute('aria-disabled') === 'true') return;
+
+        event.preventDefault();
+        const id = nav.dataset.go || nav.getAttribute('href').slice(1);
+        go(id);
+      });
+
+      /* ---------- Teste rápido (Tela 21) ---------- */
+
+      const quizFeedback = document.getElementById('quiz-feedback');
+      document.querySelectorAll('[data-quiz]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const correct = btn.dataset.correct === 'true';
+          quizFeedback.innerHTML = '';
+          const box = document.createElement('div');
+          box.className = 'callout ' + (correct ? 'callout--ok' : 'callout--warn');
+
+          const title = document.createElement('strong');
+          const text = document.createElement('p');
+          if (correct) {
+            title.textContent = 'Resposta correta.';
+            text.textContent = 'O profissional de apoio escolar atua na higiene, alimentação e locomoção (LBI, art. 3º, XIII).';
+          } else {
+            title.textContent = 'Não é essa a resposta.';
+            text.textContent = 'Essas necessidades de higiene, alimentação e locomoção são do profissional de apoio escolar.';
+          }
+          box.appendChild(title);
+          box.appendChild(text);
+          quizFeedback.appendChild(box);
+        });
+      });
+
+      /* ---------- Modal de saída externa ---------- */
+
+      function openExternal(url) {
+        let host = url;
+        try { host = new URL(url).hostname; } catch (e) { /* mantém a URL bruta */ }
+
+        modalUrl.textContent = host + ' (' + url + ')';
+        modalGo.href = url;
+
+        returnFocusEl = document.activeElement;
+        modal.hidden = false;
+        app.inert = true;
+        modalCancel.focus();
+      }
+
+      function closeModal() {
+        modal.hidden = true;
+        app.inert = false;
+        if (returnFocusEl) returnFocusEl.focus();
+        returnFocusEl = null;
+      }
+
+      modalCancel.addEventListener('click', closeModal);
+      modalGo.addEventListener('click', function () {
+        window.setTimeout(closeModal, 0);
+      });
+
+      // Mantém o foco dentro do modal e fecha com Esc
+      modal.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeModal();
+          return;
+        }
+        if (event.key === 'Tab') {
+          const first = modalGo;
+          const last = modalCancel;
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      /* ---------- Inicialização ---------- */
+
+      route(true);
+    })();
+  </script>
+</body>
+</html>
