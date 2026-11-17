@@ -41,3 +41,7 @@ O conteúdo não substitui orientação jurídica profissional e não deve ser i
 ## 📌 Status
 
 Protótipo acadêmico desenvolvido para apresentação e avaliação na disciplina de Tecnologia e Impacto Social.
+
+## 🌐 Acesse o protótipo
+
+[Visualizar Direito Claro](https://adryan510.github.io/Direito-Claro/)
